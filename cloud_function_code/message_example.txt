@@ -1,0 +1,4 @@
+{"message": "This is a custom message"}
+
+https://us-central1-etl-python-poland-preparation.cloudfunctions.net/publish_to_pub_sub-2?message=santiago%20rules%20for%20sure%20my%20friend
+
