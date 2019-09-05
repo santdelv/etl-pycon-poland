@@ -1,4 +1,3 @@
-{"message": "This is a custom message"}
+{"message": "This is a custom message from a cloud function"}
 
-https://us-central1-etl-python-poland-preparation.cloudfunctions.net/publish_to_pub_sub-2?message=santiago%20rules%20for%20sure%20my%20friend
-
+https://us-central1-etl-python-poland-preparation.cloudfunctions.net/publish_to_pub_sub-2?message=a message coming from a cloud function

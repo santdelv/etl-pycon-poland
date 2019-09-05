@@ -1,8 +1,8 @@
 from google.cloud import pubsub_v1
 
 publisher = pubsub_v1.PublisherClient()
-topic_name = 'pyconpoland'
-project_id = 'etl-python-poland-preparation'
+topic_name = 'pyconpoland’'
+project_id = 'YOUR_PROJECT_ID_HERE'
 topic_path = publisher.topic_path(project_id, topic_name)
 
 

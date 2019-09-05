@@ -7,9 +7,7 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import StandardOptions
 
 pipeline_args = [
-    '--project={}'.format('etl-python-poland-preparation'),
     '--runner={}'.format('DirectRunner'),
-    '--temp_location=gs://dataflowtemporal-2/',
 ]
 
 PROJECT_ID = 'etl-pycon-huge'
@@ -99,7 +97,6 @@ def run():
 
     pipeline_options = PipelineOptions(pipeline_args)
     pipeline_options.view_as(StandardOptions).streaming = True
-
     pipeline = beam.Pipeline(options=pipeline_options)
 
     pipeline | 'Read from pub sub' >> beam.io.ReadFromPubSub(subscription=subscription_id,
