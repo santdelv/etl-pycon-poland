@@ -1,8 +1,5 @@
 
 import apache_beam as beam
-import html
-import textstat
-import emoji
 from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam.options.pipeline_options import StandardOptions
 
@@ -10,14 +7,20 @@ pipeline_args = [
     '--project={}'.format('etl-python-poland-preparation'),
     '--runner={}'.format('Dataflow'),
     '--temp_location=gs://dataflowtemporal/',
-    #'--job_name=mycustomjob15',
-    #'--setup_file=setup.py'
-    '--setup_file=./setup.py',
-    #'--requirements_file=./requirements.txt'
+    '--job_name=pycon-poland-datafow-job',
+    '--requirements_file=./requirements.txt'
+
 ]
 
-table_spec = 'etl-python-poland-preparation:pyconpoland.transformed_data'
-table_schema = 'clean_text:STRING, readability:NUMERIC'
+PROJECT_ID = 'etl-python-poland-preparation'
+DATASET = 'pyconpoland'
+TABLE_NAME = 'transformed_data'
+SUBSCRIPTION_NAME = 'localsub'
+
+_table_spec = f'{PROJECT_ID}:{DATASET}.{TABLE_NAME}'
+_table_schema = 'clean_text:STRING, readability:NUMERIC'
+
+subscription_id = f'projects/{PROJECT_ID}/subscriptions/{SUBSCRIPTION_NAME}'
 
 
 def calculate_readability(content):
@@ -31,6 +34,7 @@ def calculate_readability(content):
     Returns:
         The content with the added readability score
     """
+    import textstat
     content['readability'] = textstat.flesch_reading_ease(content['clean_text'])
     return content
 
@@ -58,23 +62,11 @@ def clean_up_text(content):
     Returns:
         A text free of emojis and unescaped html
     """
+    import html
+    import emoji
     aux_var = html.unescape(content['clean_text'])
-    content['clean_text'] = remove_emoji(aux_var)
+    content['clean_text'] = emoji.get_emoji_regexp().sub(u'', aux_var)
     return content
-
-
-def remove_emoji(text):
-    """Removes emojis from a text
-
-    Taken from https://stackoverflow.com/questions/51784964/remove-emojis-from-multilingual-unicode-text/51785357#51785357
-
-    Args:
-        text: The text we want to clean up
-
-    Returns:
-        A text free of emojis
-    """
-    return emoji.get_emoji_regexp().sub(u'', text)
 
 
 def filter_out_data(content):
@@ -98,11 +90,12 @@ def run():
     pipeline_options.view_as(StandardOptions).streaming = True
 
     pipeline = beam.Pipeline(options=pipeline_options)
-    subscription_id = 'projects/etl-python-poland-preparation/subscriptions/localsub'
 
-    pipeline | 'Read from pub sub' >> beam.io.ReadFromPubSub(subscription=subscription_id, with_attributes=True) |  'convert_to_dict' >> beam.Map(
-        convert_to_dict) |'Filter out short entries' >> beam.Filter(filter_out_data) | 'clean_up_text' >> beam.Map(clean_up_text) | 'calculate_readability' >> beam.Map(
-        calculate_readability) | 'Write to big Query' >> beam.io.WriteToBigQuery(table_spec, schema=table_schema)
+    pipeline | 'Read from pub sub' >> beam.io.ReadFromPubSub(subscription=subscription_id,
+                                                             with_attributes=True) | 'Convert to dictionary' >> beam.Map(
+        convert_to_dict) | 'Filter out short entries' >> beam.Filter(filter_out_data) | 'clean_up_text' >> beam.Map(
+        clean_up_text) | 'calculate_readability' >> beam.Map(
+        calculate_readability) | 'Write to big Query' >> beam.io.WriteToBigQuery(_table_spec, schema=_table_schema)
 
     pipeline.run()
 

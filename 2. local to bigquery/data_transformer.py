@@ -4,7 +4,11 @@ import html
 import textstat
 import emoji
 
-_table_spec = 'etl-python-poland-preparation:pyconpoland.transformed_data'
+PROJECT_ID = 'etl-pycon-huge'
+DATASET = 'pycon_data'
+TABLE_NAME = 'pycon_clean_data'
+
+_table_spec = f'{PROJECT_ID}:{DATASET}.{TABLE_NAME}'
 _table_schema = 'clean_text:STRING, readability:NUMERIC'
 
 
@@ -83,8 +87,8 @@ def run():
 
     pipeline = beam.Pipeline('DirectRunner')
 
-    pipeline | 'Read data from csv' >> beam.io.ReadFromText(
-        'test_data.csv') | 'Filter out short entries' >> beam.Filter(filter_out_data) | 'Clean up text' >> beam.Map(
+    pipeline | 'Read data from txt' >> beam.io.ReadFromText(
+        'test_data.txt') | 'Filter out short entries' >> beam.Filter(filter_out_data) | 'Clean up text' >> beam.Map(
         clean_up_text) | 'Convert to a dictionary' >> beam.Map(convert_to_dict) | 'Calculate readability' >> beam.Map(
         calculate_readability) | 'Write to big Query' >> beam.io.WriteToBigQuery(_table_spec, schema=_table_schema)
     pipeline.run()

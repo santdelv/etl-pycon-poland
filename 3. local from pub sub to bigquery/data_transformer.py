@@ -9,12 +9,18 @@ from apache_beam.options.pipeline_options import StandardOptions
 pipeline_args = [
     '--project={}'.format('etl-python-poland-preparation'),
     '--runner={}'.format('DirectRunner'),
-    '--temp_location=gs://dataflowtemporal/',
+    '--temp_location=gs://dataflowtemporal-2/',
 ]
 
-table_spec = 'etl-python-poland-preparation:pyconpoland.transformed_data'
-table_schema = 'clean_text:STRING, readability:NUMERIC'
-subscription_id = 'projects/etl-python-poland-preparation/subscriptions/localsub'
+PROJECT_ID = 'etl-pycon-huge'
+DATASET = 'pycon_data'
+TABLE_NAME = 'pycon_clean_data'
+SUBSCRIPTION_NAME = 'pycon-subscription'
+
+_table_spec = f'{PROJECT_ID}:{DATASET}.{TABLE_NAME}'
+_table_schema = 'clean_text:STRING, readability:NUMERIC'
+
+subscription_id = f'projects/{PROJECT_ID}/subscriptions/{SUBSCRIPTION_NAME}'
 
 
 def calculate_readability(content):
@@ -100,7 +106,7 @@ def run():
                                                              with_attributes=True) | 'Convert to dictionary' >> beam.Map(
         convert_to_dict) | 'Filter out short entries' >> beam.Filter(filter_out_data) | 'Clean up text' >> beam.Map(
         clean_up_text) | 'Calculate readability' >> beam.Map(
-        calculate_readability) | 'Write to big Query' >> beam.io.WriteToBigQuery(table_spec, schema=table_schema)
+        calculate_readability) | 'Write to big Query' >> beam.io.WriteToBigQuery(_table_spec, schema=_table_schema)
 
     pipeline.run().wait_until_finish()
 
