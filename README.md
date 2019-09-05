@@ -8,7 +8,7 @@ The first step would be cloning the repo and installing the dependencies:
 
 `pip install -r requirements.txt`
 
-Now go to https://console.cloud .google.com if you don’t have an account just click on try it for free, that free tier account is enough for following these exercise.
+Now go to https://console.cloud.google.com if you don’t have an account just click on try it for free, that free tier account is enough for following these exercise.
 
 Create a new project, click on the project browser dropdown and click on ‘Create project’, give it a name and save it. Wait for the project to be created and then take note of the project id, we will need it later.
 
@@ -41,14 +41,14 @@ We need this service account to run the application locally, and give it all the
 * Click on add field name again.
 * Create a field of name 'readability' and type Numeric.
 
-We have a data se to write to now, let’s go to 2.local_to_bigquery and to data_transformer.py
+We have a data set to write to now, let’s go to 2.local_to_bigquery and to data_transformer.py
 replace the variable PROJECT_ID with your actual project id.
 
 Run the project in that folder:
 
 `python data_transformer.py`
 
-You should see the resulting data on the bigquery table we created.
+You should see the resulting data on the BigQuery table we created.
 
 * Go to cloud Pub/Sub, under the big data options.
 * Click on create topic, put as name ‘pyconpoland’.
@@ -96,4 +96,4 @@ Go to the folder 5.final_version and run the code lie this:
 
 Wait for the script to stop.
 
-Now let’s go to DataFlow under the Big Data options and we should see the data flow job, now we have our code running on the cloud!, we can send the data and see it reflected on BigQUery as we were doing with the cloud function.
+Now let’s go to DataFlow under the Big Data options and we should see the data flow job, now we have our code running on the cloud!, we can send the data and see it reflected on BigQuery as we were doing with the cloud function.
