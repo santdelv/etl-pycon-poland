@@ -21,7 +21,7 @@ This will read from the file test_data.txt and write the results of the transfor
 * Go to the option IAM & admin.
 * Click on service accounts.
 * Click create service account.
-* Fill in the name ‘etl-service-account’.
+* Fill in the name 'etl-service-account'.
 * Select the role Dataflow admin.
 * Select the role BigQuery Editor.
 * Select the role Pub/Sub subscriber.
@@ -33,7 +33,7 @@ This will read from the file test_data.txt and write the results of the transfor
 We need this service account to run the application locally, and give it all the permissions we are going to need.
 
 * Go to BigQuery, under the big data options.
-* Click on Create a Data set, give it as a name ‘pycon_data.
+* Click on Create a Data set, give it as a name 'pycon_data'.
 * Click over the name of the newly created dataset.
 * Click on Create table
 * Click on Add field.
@@ -51,12 +51,12 @@ Run the project in that folder:
 You should see the resulting data on the BigQuery table we created.
 
 * Go to cloud Pub/Sub, under the big data options.
-* Click on create topic, put as name ‘pyconpoland’.
+* Click on create topic, put as name 'pyconpoland'.
 * Click on Subscriptions.
 * Click on Create subscription.
 * The delivery type should be pull.
 * The subscription name should be pycon-subscription
-* The topic id should be ‘projects/<project-id>/topics/datasubscription’.
+* The topic id should be 'projects/<project-id>/topics/datasubscription'.
 
 Go to 3.local_from_pub_sub_to_bigquery, replace on data_transformer.py and replace the variable PROJECT_ID with your actual project id
 
@@ -68,7 +68,7 @@ Leave it running, go to your Subscription on Pub/sub click on publish message, a
 
 * Go to cloud functions, under the compute options.
 * Click on create functions.
-* Give it a name: ‘publish_to_pub_sub’.
+* Give it a name: 'publish_to_pub_sub'.
 * Select python 3.7 as the run time.
 * Copy the requirements from the sample code.
 * Copy the main code on main.py.
@@ -88,7 +88,7 @@ Replacing <project-region> and <project-id> with the correct values
 * Click on create bucket. Enter a name for your bucket.
 * Give it a name.
 * Select regional as the location type.
-* Choose the Standard
+* Choose the Standard storage class.
 
 Go to the folder 5.final_version and run the code lie this:
 
