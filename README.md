@@ -97,3 +97,5 @@ Go to the folder 5.final_version and run the code lie this:
 Wait for the script to stop.
 
 Now let’s go to DataFlow under the Big Data options and we should see the data flow job, now we have our code running on the cloud!, we can send the data and see it reflected on BigQuery as we were doing with the cloud function.
+
+You can find the presentation under the resources folder of this repo.
